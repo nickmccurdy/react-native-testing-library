@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Text, Image } from 'react-native';
+import { Text, TextInput, Button, Image } from 'react-native';
 import { render } from '..';
 
 test('queryByText nested <Image> in <Text> at start', () => {
@@ -74,4 +74,16 @@ test('queryByText nested <CustomText> in <Text>', () => {
       </Text>
     ).queryByText('Hello World!')
   ).toBeTruthy();
+});
+
+test('queryByText supports Button', () => {
+  const result = render(<Button title="Hello World!" onPress={() => {}} />);
+  expect(result.queryByText('Hello World!')).toBeTruthy();
+  expect(result.queryByText(/Hello World!/)).toBeTruthy();
+});
+
+test('queryByText supports TextInput', () => {
+  const result = render(<TextInput value="Hello World!" />);
+  expect(result.queryByText('Hello World!')).toBeTruthy();
+  expect(result.queryByText(/Hello world!/i)).toBeTruthy();
 });

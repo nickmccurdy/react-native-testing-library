@@ -14,16 +14,23 @@ const filterNodeByType = (node, type) => node.type === type;
 const getNodeByText = (node, text) => {
   try {
     // eslint-disable-next-line
-    const { Text } = require('react-native');
+    const { Text, Button, TextInput } = require('react-native');
     const isTextComponent = filterNodeByType(node, Text);
+    const isButtonComponent = filterNodeByType(node, Button);
+    const isTextInputComponent = filterNodeByType(node, TextInput);
+    let textChildren;
     if (isTextComponent) {
-      const textChildren = getChildrenAsText(node.props.children, Text);
-      if (textChildren) {
-        const textToTest = textChildren.join('');
-        return typeof text === 'string'
-          ? text === textToTest
-          : text.test(textToTest);
-      }
+      textChildren = getChildrenAsText(node.props.children, Text);
+    } else if (isButtonComponent) {
+      textChildren = getChildrenAsText(node.props.title, Text);
+    } else if (isTextInputComponent) {
+      textChildren = getChildrenAsText(node.props.value, Text);
+    }
+    if (textChildren) {
+      const textToTest = textChildren.join('');
+      return typeof text === 'string'
+        ? text === textToTest
+        : text.test(textToTest);
     }
     return false;
   } catch (error) {
